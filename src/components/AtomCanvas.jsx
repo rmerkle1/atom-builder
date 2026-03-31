@@ -13,24 +13,24 @@ function NucleusLabel({ protons, neutrons }) {
       <circle
         cx={CX} cy={CY} r={r}
         fill="url(#nucleusGrad)"
-        stroke="#f97316"
+        stroke="#e9177a"
         strokeWidth="2"
         className="glow-nucleus"
       />
       <text x={CX} y={CY - 7} textAnchor="middle" dominantBaseline="middle"
-        fill="#fed7aa" fontSize="11" fontWeight="bold">
+        fill="#f9a8d4" fontSize="11" fontWeight="bold">
         P: {protons}
       </text>
       <text x={CX} y={CY + 8} textAnchor="middle" dominantBaseline="middle"
-        fill="#d1d5db" fontSize="11">
+        fill="#94a3b8" fontSize="11">
         N: {neutrons}
       </text>
     </>
   );
 }
 
-export default function AtomCanvas({ protons, neutrons, filledSlots, onToggleSlot }) {
-  const [dragMode, setDragMode] = useState(null); // 'add' | 'remove'
+export default function AtomCanvas({ protons, neutrons, filledSlots, onToggleSlot, onFillOrbital }) {
+  const [dragMode, setDragMode] = useState(null);
   const isDragging = useRef(false);
 
   useEffect(() => {
@@ -53,6 +53,12 @@ export default function AtomCanvas({ protons, neutrons, filledSlots, onToggleSlo
     onToggleSlot(slot.id, dragMode);
   }
 
+  function handleSlotDblClick(e, slot) {
+    e.preventDefault();
+    e.stopPropagation();
+    onFillOrbital(slot.shell, slot.orbital);
+  }
+
   return (
     <svg
       viewBox="0 0 700 700"
@@ -61,12 +67,8 @@ export default function AtomCanvas({ protons, neutrons, filledSlots, onToggleSlo
     >
       <defs>
         <radialGradient id="nucleusGrad" cx="40%" cy="35%">
-          <stop offset="0%" stopColor="#fdba74" />
-          <stop offset="100%" stopColor="#c2410c" />
-        </radialGradient>
-        <radialGradient id="electronGrad" cx="35%" cy="30%">
-          <stop offset="0%" stopColor="#93c5fd" />
-          <stop offset="100%" stopColor="#1d4ed8" />
+          <stop offset="0%" stopColor="#f472b6" />
+          <stop offset="100%" stopColor="#9d174d" />
         </radialGradient>
         <filter id="glow">
           <feGaussianBlur stdDeviation="2.5" result="blur" />
@@ -81,33 +83,28 @@ export default function AtomCanvas({ protons, neutrons, filledSlots, onToggleSlo
       ))}
 
       {/* Orbital group arcs + labels */}
-      {COMPUTED_SHELLS.map(({ shell, radius, groups }) =>
+      {COMPUTED_SHELLS.map(({ shell, groups }) =>
         groups.map(g => (
           <g key={`${shell}-${g.orbital}`}>
-            <path
-              d={g.path}
-              fill="none"
-              stroke={g.arcColor}
-              strokeWidth="14"
-              strokeLinecap="round"
-              opacity="0.85"
-            />
-            <path
-              d={g.path}
-              fill="none"
-              stroke={g.color}
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              opacity="0.4"
-            />
+            {g.isFullCircle ? (
+              <>
+                <circle cx={CX} cy={CY} r={g.radius}
+                  fill="none" stroke={g.arcColor} strokeWidth="14" opacity="0.9" />
+                <circle cx={CX} cy={CY} r={g.radius}
+                  fill="none" stroke={g.color} strokeWidth="1.5" opacity="0.4" />
+              </>
+            ) : (
+              <>
+                <path d={g.path} fill="none" stroke={g.arcColor}
+                  strokeWidth="14" strokeLinecap="round" opacity="0.85" />
+                <path d={g.path} fill="none" stroke={g.color}
+                  strokeWidth="1.5" strokeLinecap="round" opacity="0.4" />
+              </>
+            )}
             <text
               x={g.labelX} y={g.labelY}
-              textAnchor="middle"
-              dominantBaseline="middle"
-              fill={g.color}
-              fontSize="9"
-              fontWeight="bold"
-              opacity="0.8"
+              textAnchor="middle" dominantBaseline="middle"
+              fill={g.color} fontSize="9" fontWeight="bold" opacity="0.85"
             >
               {shell}{g.orbital}
             </text>
@@ -126,8 +123,8 @@ export default function AtomCanvas({ protons, neutrons, filledSlots, onToggleSlo
               onMouseDown={() => handleSlotDown(slot)}
               onMouseEnter={() => handleSlotEnter(slot)}
               onTouchStart={() => handleSlotDown(slot)}
+              onDoubleClick={e => handleSlotDblClick(e, slot)}
             >
-              {/* Slot background circle */}
               <circle
                 cx={slot.x} cy={slot.y} r={SLOT_R}
                 fill={filled ? slot.color : '#0f172a'}
@@ -136,12 +133,10 @@ export default function AtomCanvas({ protons, neutrons, filledSlots, onToggleSlo
                 opacity={filled ? 1 : 0.5}
                 filter={filled ? 'url(#glow)' : undefined}
               />
-              {/* Electron dot */}
               {filled && (
                 <circle
                   cx={slot.x} cy={slot.y} r={SLOT_R * 0.55}
-                  fill="white"
-                  opacity="0.35"
+                  fill="white" opacity="0.3"
                 />
               )}
             </g>

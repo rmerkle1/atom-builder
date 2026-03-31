@@ -2,39 +2,47 @@ const CX = 350;
 const CY = 350;
 const GAP_DEGREES = 14;
 
+// New color scheme
+export const ORBITAL_COLORS = {
+  s: { color: '#17b29e', arcColor: '#063d37' },
+  p: { color: '#748ac5', arcColor: '#1e2545' },
+  d: { color: '#fdb714', arcColor: '#4a3300' },
+  f: { color: '#00addb', arcColor: '#003347' },
+};
+
 export const SHELL_DEFS = [
   {
     shell: 1,
     radius: 90,
     orbitals: [
-      { type: 's', capacity: 2, color: '#60a5fa', arcColor: '#1e3a5f' },
+      { type: 's', capacity: 2, ...ORBITAL_COLORS.s },
     ],
   },
   {
     shell: 2,
     radius: 155,
     orbitals: [
-      { type: 's', capacity: 2,  color: '#60a5fa', arcColor: '#1e3a5f' },
-      { type: 'p', capacity: 6,  color: '#34d399', arcColor: '#064e3b' },
+      { type: 's', capacity: 2,  ...ORBITAL_COLORS.s },
+      { type: 'p', capacity: 6,  ...ORBITAL_COLORS.p },
     ],
   },
   {
     shell: 3,
     radius: 225,
     orbitals: [
-      { type: 's', capacity: 2,  color: '#60a5fa', arcColor: '#1e3a5f' },
-      { type: 'p', capacity: 6,  color: '#34d399', arcColor: '#064e3b' },
-      { type: 'd', capacity: 10, color: '#fb923c', arcColor: '#431407' },
+      { type: 's', capacity: 2,  ...ORBITAL_COLORS.s },
+      { type: 'p', capacity: 6,  ...ORBITAL_COLORS.p },
+      { type: 'd', capacity: 10, ...ORBITAL_COLORS.d },
     ],
   },
   {
     shell: 4,
     radius: 300,
     orbitals: [
-      { type: 's', capacity: 2,  color: '#60a5fa', arcColor: '#1e3a5f' },
-      { type: 'p', capacity: 6,  color: '#34d399', arcColor: '#064e3b' },
-      { type: 'd', capacity: 10, color: '#fb923c', arcColor: '#431407' },
-      { type: 'f', capacity: 14, color: '#c084fc', arcColor: '#3b0764' },
+      { type: 's', capacity: 2,  ...ORBITAL_COLORS.s },
+      { type: 'p', capacity: 6,  ...ORBITAL_COLORS.p },
+      { type: 'd', capacity: 10, ...ORBITAL_COLORS.d },
+      { type: 'f', capacity: 14, ...ORBITAL_COLORS.f },
     ],
   },
 ];
@@ -59,8 +67,11 @@ function arcPath(r, startDeg, endDeg) {
 export function buildShells() {
   return SHELL_DEFS.map(def => {
     const { shell, radius, orbitals } = def;
+    const isShell1 = shell === 1;
+
+    // Shell 1 has only 1s — slots at top and bottom, arc fills full circle
     const totalSlots = orbitals.reduce((s, o) => s + o.capacity, 0);
-    const numGaps = orbitals.length;
+    const numGaps = isShell1 ? 0 : orbitals.length;
     const totalGapDeg = GAP_DEGREES * numGaps;
     const available = 360 - totalGapDeg;
     const degPerSlot = available / totalSlots;
@@ -68,7 +79,7 @@ export function buildShells() {
 
     const slots = [];
     const groups = [];
-    let angle = -90; // start at 12 o'clock
+    let angle = -90;
 
     for (const orb of orbitals) {
       const groupStart = angle;
@@ -90,6 +101,7 @@ export function buildShells() {
 
       const groupEnd = angle - degPerSlot;
       const midAngle = (groupStart + groupEnd) / 2;
+      // Push label outside the ring
       const labelPt = pointOnCircle(radius + 22, midAngle);
 
       groups.push({
@@ -101,10 +113,13 @@ export function buildShells() {
         midAngle,
         labelX: labelPt.x,
         labelY: labelPt.y,
-        path: arcPath(radius, groupStart - halfSlot * 0.5, groupEnd + halfSlot * 0.5),
+        // Shell 1 draws a full circle via <circle> in AtomCanvas
+        isFullCircle: isShell1,
+        path: isShell1 ? null : arcPath(radius, groupStart - halfSlot * 0.5, groupEnd + halfSlot * 0.5),
+        radius,
       });
 
-      angle += GAP_DEGREES;
+      angle += isShell1 ? 0 : GAP_DEGREES;
     }
 
     return { shell, radius, slots, groups };
