@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #0f172a;
+  color: #e2e8f0;
+  font-family: 'Inter', system-ui, sans-serif;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  text-align: left;
+  border: none;
+  min-height: unset;
+}
+
+input[type='range'] {
+  accent-color: #60a5fa;
+  cursor: pointer;
+}
+
+.electron-slot {
+  cursor: pointer;
+}
+
+.glow-nucleus {
+  filter: drop-shadow(0 0 14px #f9731688);
+}
