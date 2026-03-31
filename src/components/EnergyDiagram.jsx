@@ -36,13 +36,17 @@ function getBoxArrows(count, numBoxes) {
 }
 
 function OrbitalBox({ electrons, color }) {
+  // Side-by-side half-arrows: ↿ (spin-up harpoon) left, ⇂ (spin-down harpoon) right
+  // Transparent placeholder keeps box width stable when empty
+  const upColor   = electrons >= 1 ? color : 'transparent';
+  const downColor = electrons >= 2 ? color : 'transparent';
   return (
     <div
-      className="w-8 h-10 border-2 flex flex-col items-center justify-center gap-0 rounded-sm"
+      className="w-9 h-9 border-2 flex flex-row items-end justify-center gap-px pb-1 rounded-sm"
       style={{ borderColor: color }}
     >
-      {electrons >= 2 && <span className="text-xs font-bold leading-none" style={{ color }}>↓</span>}
-      {electrons >= 1 && <span className="text-xs font-bold leading-none" style={{ color }}>↑</span>}
+      <span className="text-base font-bold leading-none" style={{ color: upColor }}>↿</span>
+      <span className="text-base font-bold leading-none" style={{ color: downColor }}>⇂</span>
     </div>
   );
 }

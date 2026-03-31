@@ -69,11 +69,10 @@ export default function ControlPanel({ protons, neutrons, onProtonsChange, onNeu
       {/* Energy diagram button */}
       <button
         onClick={onShowEnergyDiagram}
-        className="w-full py-2 rounded-xl text-xs font-semibold transition-colors
-                   border border-slate-600 hover:border-slate-400 text-slate-300
-                   hover:text-white hover:bg-slate-800"
+        className="w-full py-2 rounded-xl bg-slate-700 hover:bg-slate-600
+                   text-slate-300 font-semibold text-sm transition-colors"
       >
-        ⚡ Energy Diagram
+        Energy Diagram
       </button>
     </div>
   );
