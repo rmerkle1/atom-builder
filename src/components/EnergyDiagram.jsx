@@ -42,11 +42,11 @@ function OrbitalBox({ electrons, color }) {
   const downColor = electrons >= 2 ? color : 'transparent';
   return (
     <div
-      className="w-10 h-11 border-2 flex flex-row items-end justify-center gap-px pb-1 rounded-sm"
+      className="w-10 h-11 border-2 flex flex-row items-end justify-center gap-0 pb-1 rounded-sm"
       style={{ borderColor: color }}
     >
-      <span className="text-3xl font-bold leading-none" style={{ color: upColor }}>↿</span>
-      <span className="text-3xl font-bold leading-none" style={{ color: downColor }}>⇂</span>
+      <span className="text-3xl font-bold leading-none -mr-1" style={{ color: upColor }}>↿</span>
+      <span className="text-3xl font-bold leading-none -ml-1" style={{ color: downColor }}>⇂</span>
     </div>
   );
 }
