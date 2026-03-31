@@ -45,8 +45,8 @@ function OrbitalBox({ electrons, color }) {
       className="w-9 h-9 border-2 flex flex-row items-end justify-center gap-px pb-1 rounded-sm"
       style={{ borderColor: color }}
     >
-      <span className="text-base font-bold leading-none" style={{ color: upColor }}>↿</span>
-      <span className="text-base font-bold leading-none" style={{ color: downColor }}>⇂</span>
+      <span className="text-xl font-bold leading-none" style={{ color: upColor }}>↿</span>
+      <span className="text-xl font-bold leading-none" style={{ color: downColor }}>⇂</span>
     </div>
   );
 }
