@@ -21,10 +21,10 @@ export default function InfoPanel({ protons, neutrons, filledSlots }) {
   const atomName = getAtomDisplayName(protons, neutrons, totalElectrons);
 
   return (
-    <div className="flex items-center gap-6 px-6 py-3 bg-slate-900 border-t border-slate-700/60
+    <div data-tutorial-id="info-panel" className="flex items-center gap-6 px-6 py-3 bg-slate-900 border-t border-slate-700/60
                     shrink-0 min-h-[90px]">
       {/* Left: particle counts */}
-      <div className="flex gap-5 text-sm shrink-0">
+      <div data-tutorial-id="info-panel-left" className="flex gap-5 text-sm shrink-0">
         <div className="flex flex-col items-center">
           <span className="text-slate-500 text-xs uppercase tracking-wider">Protons</span>
           <span className="font-bold text-xl tabular-nums" style={{ color: '#e9177a' }}>{protons}</span>
@@ -58,7 +58,7 @@ export default function InfoPanel({ protons, neutrons, filledSlots }) {
       <div className="w-px h-12 bg-slate-700 shrink-0" />
 
       {/* Right: electron config + legend */}
-      <div className="flex flex-col gap-1 shrink-0">
+      <div data-tutorial-id="electron-config" className="flex flex-col gap-1 shrink-0">
         <span className="text-slate-500 text-xs uppercase tracking-wider font-semibold">Electron Configuration</span>
         <span className="font-mono text-sm tracking-wide" style={{ color: '#00addb' }}>{config}</span>
         <div className="flex gap-3 mt-1">

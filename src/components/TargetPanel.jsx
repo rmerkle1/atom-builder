@@ -6,7 +6,7 @@ const CATEGORY_STYLES = {
   Ion:     { text: '#748ac5', bg: 'rgba(116,138,197,0.1)', border: 'rgba(116,138,197,0.4)' },
 };
 
-export default function TargetPanel({ challenge, onSelectChallenge }) {
+export default function TargetPanel({ challenge, onSelectChallenge, onStartTutorial }) {
   const style = CATEGORY_STYLES[challenge.category] || CATEGORY_STYLES.Element;
 
   return (
@@ -40,9 +40,17 @@ export default function TargetPanel({ challenge, onSelectChallenge }) {
         </div>
       </div>
 
-      {/* Right: hint */}
-      <div className="shrink-0 max-w-[220px] text-right">
-        <span className="text-slate-500 text-xs italic">{challenge.hint}</span>
+      {/* Right: hint + tutorial button */}
+      <div className="shrink-0 flex items-center gap-3">
+        <span className="text-slate-500 text-xs italic max-w-[220px] text-right">{challenge.hint}</span>
+        <button
+          onClick={onStartTutorial}
+          title="Start tutorial"
+          className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold
+                     bg-slate-700 hover:bg-slate-600 text-slate-300 transition-colors shrink-0"
+        >
+          ?
+        </button>
       </div>
     </div>
   );

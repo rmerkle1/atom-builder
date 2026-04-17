@@ -42,7 +42,7 @@ function ParticleSlider({ label, value, max, color, onChange }) {
 
 export default function ControlPanel({ protons, neutrons, onProtonsChange, onNeutronsChange, onShowEnergyDiagram }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-5 h-full px-3 py-6
+    <div data-tutorial-id="control-panel" className="flex flex-col items-center justify-center gap-5 h-full px-3 py-6
                     bg-slate-900 border-r border-slate-700/60 w-[170px] shrink-0">
       <div className="text-slate-400 text-xs text-center font-semibold uppercase tracking-wider">
         Nucleus
